@@ -7,7 +7,7 @@ const defaultgetHandlerOptions = {
   dir: resolve("infra", "migrations"),
   direction: "up",
   verbose: true,
-  getHandlerTable: "pggetHandler",
+  migrationsTable: "pgmigrations",
 };
 
 async function listPendingMigrations() {
@@ -16,11 +16,11 @@ async function listPendingMigrations() {
   try {
     dbClient = await database.getNewClient();
 
-    const pendinggetHandler = await migrationRunner({
+    const pendingMigrations = await migrationRunner({
       ...defaultgetHandlerOptions,
       dbClient,
     });
-    return pendinggetHandler;
+    return pendingMigrations;
   } finally {
     await dbClient?.end();
   }
@@ -32,13 +32,13 @@ async function runPendingMigrations() {
   try {
     dbClient = await database.getNewClient();
 
-    const migretedgetMigrations = await migrationRunner({
+    const migratedMigrations = await migrationRunner({
       ...defaultgetHandlerOptions,
       dbClient,
       dryRun: false,
     });
 
-    return migretedgetMigrations;
+    return migratedMigrations;
   } finally {
     await dbClient?.end();
   }
